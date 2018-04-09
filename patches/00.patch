@@ -1,0 +1,44 @@
+diff --git a/__/Ved/Visual.__ b/__/Ved/Visual.__
+index a663348..4b536fe 100644
+--- a/__/Ved/Visual.__
++++ b/__/Ved/Visual.__
+@@ -363,7 +363,7 @@ subclass Visual
+       if (033 == chr)
+         {
+         variable names = ["yank", "comment", "! system",
+-          "$ eval", "C execute", "hunspell", "xclipboard", "> shift out",
++          "$ eval", "C execute", "hunspell", "Xclipboard", "> shift out",
+           "< shift in", "substitute", "delete", "write", "global",
+           ];
+         variable help = [
+@@ -373,7 +373,7 @@ subclass Visual
+           "evaluate to slang",
+           "compile to C and execute string",
+           "spell visual lines",
+-          "send visual lines to XA_PRIMARY",
++          "send visual lines to XA_CLIPBOARD",
+           "shift rightwards",
+           "shift leftwards",
+           "make substitutions to visual lines",
+diff --git a/__/_/Srv.__ b/__/_/Srv.__
+index d217680..446fab2 100644
+--- a/__/_/Srv.__
++++ b/__/_/Srv.__
+@@ -17,6 +17,17 @@ class _
+   var screen_size_changed = 0;
+   decl __sigwinch_handler__
+ 
++  def at_exit () static proc
++    variable i;
++    _for i (0, length (CONNECTED_APPS) - 1)
++      {
++      variable app = CONNECTED_APPS[i];
++      variable pid = CONNECTED_PIDS[i];
++      variable s = App->APPS[app][string (pid)];
++      Sock.send_int (s.fd, App->GO_ATEXIT);
++      }
++  end
++
+   def get_connected_apps () proc
+     [This.is.my.name + "::" + string (Env->PID), array_map (
+       String_Type, &sprintf, "%s::%d", CONNECTED_APPS, CONNECTED_PIDS)];
