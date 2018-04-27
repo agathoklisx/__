@@ -1,0 +1,10 @@
+diff --git a/data/ftypes/mail/ved.sl b/data/ftypes/mail/ved.sl
+index 02a9eb6..a07a33d 100644
+--- a/data/ftypes/mail/ved.sl
++++ b/data/ftypes/mail/ved.sl
+@@ -1,4 +1,5 @@
+ public define mail_ved (s, fname)
+ {
+   mail_settype (s, fname, VED_ROWS, NULL);
++  __vdef_ved (s, fname);
+ }

@@ -1,0 +1,61 @@
+diff --git a/_/__app.sl b/_/__app.sl
+index 4fe3fcb..75f452f 100644
+--- a/_/__app.sl
++++ b/_/__app.sl
+@@ -430,7 +430,7 @@ private define __echo__ (argv)
+ 
+     if (">>" == flags)
+       {
+-      if (-1 == String.append (file, strjoin (argv, " ") + hasnewline))
++      if (-1 == File.append (file, strjoin (argv, " ") + hasnewline))
+         EXITSTATUS = 1;
+       }
+     else
+diff --git a/__/Fm/__init__.__ b/__/Fm/__init__.__
+index 373fc28..257d31e 100644
+--- a/__/Fm/__init__.__
++++ b/__/Fm/__init__.__
+@@ -498,7 +498,7 @@ class Fm
+       return -1;
+       }
+ 
+-    self.dir = realpath (dir); % assuming safety
++    self.dir = realpath (dir); % assuming sanity
+     self.st = st;
+ 
+     ifnot (qualifier_exists ("do_not_insert_in_stack"))
+@@ -545,7 +545,7 @@ class Fm
+ 
+     variable str  = "(fm)";
+     __topline (&str);
+-    Smg.atrcaddnstr (str, 2, self.buf.ptr[0], self.buf.ptr[1], COLUMNS);
++    Smg.atrcaddnstrdr (str, 2, 0, 0, self.buf.ptr[0], self.buf.ptr[1], COLUMNS);
+ 
+     self.buf.vedloop (;abort_on_pat = "/");
+ 
+diff --git a/__/Ved/Insert.__ b/__/Ved/Insert.__
+index 471f34e..e466500 100644
+--- a/__/Ved/Insert.__
++++ b/__/Ved/Insert.__
+@@ -1018,7 +1018,7 @@ subclass Insert
+ 
+       is.chr = Input.getch (;
+         on_lang = &_on_lang_change_, on_lang_args = {"insert", s.ptr},
+-        expr_fun = &ins_digraph, expr_args = {is, s, line}, expr_key = 0x12
++        expr_fun = &ins_digraph, expr_args = {is, s, line}, expr_key = 0xb
+         );
+ 
+       if (033 == is.chr)
+@@ -1109,6 +1109,12 @@ subclass Insert
+         continue;
+         }
+ 
++      if (Input->CTRL_r == is.chr)
++        {
++        ins_reg (s, line);
++        continue;
++        }
++
+       if (Input->F12 == is.chr)
+         {
+         ins_paste_xsel (is, s, line);
